@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="2963a0c0-6ed4-44c8-8184-d49616d0919e" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1hg01J3feueBr1u1YMlUAnxDohZ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/documentation" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/com/nyble/main" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Maven.package">
+    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.nyble.main.App" />
+      <module name="O2OPotentialsStreamApp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.nyble.main.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="package" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="clean" />
+                <option value="package" />
+              </list>
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.App" />
+      <item itemvalue="Maven.package" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.App" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2963a0c0-6ed4-44c8-8184-d49616d0919e" name="Default Changelist" comment="" />
+      <created>1600417211420</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1600417211420</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2071" y="203" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1600439260249">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state x="2071" y="203" key="#com.intellij.execution.impl.EditConfigurationsDialog/67.27.3773.1053@67.27.3773.1053" timestamp="1600439260249" />
+    <state x="2325" y="263" width="374" height="562" key="#com.intellij.ide.util.MemberChooser" timestamp="1600420446521">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state x="2325" y="263" width="374" height="562" key="#com.intellij.ide.util.MemberChooser/67.27.3773.1053@67.27.3773.1053" timestamp="1600420446521" />
+    <state width="1406" height="214" key="GridCell.Tab.0.bottom" timestamp="1601282884097">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state width="1406" height="214" key="GridCell.Tab.0.bottom/67.27.3773.1053@67.27.3773.1053" timestamp="1601282884097" />
+    <state width="1406" height="214" key="GridCell.Tab.0.center" timestamp="1601282884095">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state width="1406" height="214" key="GridCell.Tab.0.center/67.27.3773.1053@67.27.3773.1053" timestamp="1601282884095" />
+    <state width="1406" height="214" key="GridCell.Tab.0.left" timestamp="1601282884094">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state width="1406" height="214" key="GridCell.Tab.0.left/67.27.3773.1053@67.27.3773.1053" timestamp="1601282884094" />
+    <state width="1406" height="214" key="GridCell.Tab.0.right" timestamp="1601282884096">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state width="1406" height="214" key="GridCell.Tab.0.right/67.27.3773.1053@67.27.3773.1053" timestamp="1601282884096" />
+    <state width="1406" height="266" key="GridCell.Tab.1.bottom" timestamp="1600525584530">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state width="1406" height="266" key="GridCell.Tab.1.bottom/67.27.3773.1053@67.27.3773.1053" timestamp="1600525584530" />
+    <state width="1406" height="266" key="GridCell.Tab.1.center" timestamp="1600525584529">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state width="1406" height="266" key="GridCell.Tab.1.center/67.27.3773.1053@67.27.3773.1053" timestamp="1600525584529" />
+    <state width="1406" height="266" key="GridCell.Tab.1.left" timestamp="1600525584528">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state width="1406" height="266" key="GridCell.Tab.1.left/67.27.3773.1053@67.27.3773.1053" timestamp="1600525584528" />
+    <state width="1406" height="266" key="GridCell.Tab.1.right" timestamp="1600525584529">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state width="1406" height="266" key="GridCell.Tab.1.right/67.27.3773.1053@67.27.3773.1053" timestamp="1600525584529" />
+    <state x="88" y="111" width="1406" height="519" key="dock-window-1" timestamp="1600524410922">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state x="88" y="111" width="1406" height="519" key="dock-window-1/67.27.3773.1053@67.27.3773.1053" timestamp="1600524410922" />
+    <state x="1839" y="542" width="710" height="538" key="find.popup" timestamp="1604150786048">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state x="1839" y="542" width="710" height="538" key="find.popup/67.27.3773.1053@67.27.3773.1053" timestamp="1604150786048" />
+    <state x="1895" y="172" width="1372" height="796" key="new project wizard" timestamp="1600525569277">
+      <screen x="67" y="27" width="3773" height="1053" />
+    </state>
+    <state x="1895" y="172" width="1372" height="796" key="new project wizard/67.27.3773.1053@67.27.3773.1053" timestamp="1600525569277" />
+  </component>
+</project>
