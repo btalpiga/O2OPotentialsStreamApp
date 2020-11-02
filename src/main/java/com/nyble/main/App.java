@@ -23,6 +23,8 @@ import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.Produced;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -39,6 +41,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@SpringBootApplication(scanBasePackages = {"com.nyble.rest"})
 public class App {
 
     final static String KAFKA_CLUSTER_BOOTSTRAP_SERVERS = "10.100.1.17:9093";
@@ -151,6 +154,7 @@ public class App {
     }
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
+        SpringApplication.run(App.class,args);
 
         final String sourceTopic = "o2o-potentials-counts";
 
