@@ -1,6 +1,6 @@
 drop table if exists o2o_potentials_start;
 
-UPDATE config_parameters set value = substring(date_trunc('hour', now())::text, 1, 16) where key = 'O2O_POTENTIALS_DECREMENT_FROM';
+UPDATE config_parameters set value = substring(date_trunc('hour', now()-'2 year'::interval)::text, 1, 16) where key = 'O2O_POTENTIALS_DECREMENT_FROM';
 
 create table o2o_potentials_start as
 select * from (
