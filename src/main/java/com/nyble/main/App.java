@@ -74,8 +74,8 @@ public class App {
 
     public static void initSourceTopic(List<String> topics) throws ExecutionException, InterruptedException {
         //this values should be updated on redeployment, if actions are reloaded
-        final int lastRmcActionId = 646868430;
-        final int lastRrpActionId = 2080584;
+        final int lastRmcActionId = 662871381;
+        final int lastRrpActionId = 2281565;
         //
         final String consumerGroupId = "o2o-potentials-source-creator";
         final Gson gson = new Gson();
