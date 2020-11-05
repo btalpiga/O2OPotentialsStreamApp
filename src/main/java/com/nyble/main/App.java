@@ -225,12 +225,12 @@ public class App {
                 "\t\t else 0\n" +
                 "\tend as action_type, count(*) as total\n" +
                 "\tfrom consumer_actions \n" +
-                "\twhere external_system_date > '"+startDate+"' and external_system_date <= '"+endDate+"'\n" +
+                "\twhere external_system_date >= '"+startDate+"' and external_system_date < '"+endDate+"'\n" +
                 "\tgroup by system_id, consumer_id, action_type\n" +
                 "\tunion \n" +
                 "\tselect system_id, consumer_id , 3 as action_type, count(*) as total\n" +
                 "\tfrom consumer_actions\n" +
-                "\twhere external_system_date > '"+startDateShiftOneY+"' and external_system_date <= '"+endDateShiftOneY+"' \n" +
+                "\twhere external_system_date >= '"+startDateShiftOneY+"' and external_system_date < '"+endDateShiftOneY+"' \n" +
                 "\tand ( (action_id in (:o2o_out_act_rmc) and system_id = 1) )\n" +
                 "\tgroup by system_id, consumer_id\n" +
                 ") foo where action_type > 0";
