@@ -26,7 +26,7 @@ changeLog: PUT /logger `{"logName": "com.nyble", "logLevel": "warn"}`
 
 #### empty o2o-potentials-counts (source topic) :
 `bin/kafka-configs --bootstrap-server 10.100.1.17:9093 --alter --entity-type topics --entity-name o2o-potentials-counts --add-config retention.ms=10`  
---wait
+--wait  
 `bin/kafka-configs --bootstrap-server 10.100.1.17:9093 --alter --entity-type topics --entity-name o2o-potentials-counts --delete-config retention.ms`  
 
 #### use reset for o2o-potentials-stream streams app:
