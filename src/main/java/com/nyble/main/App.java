@@ -6,6 +6,7 @@ import com.nyble.topics.TopicObjectsFactory;
 import com.nyble.topics.consumerActions.ConsumerActionsValue;
 import com.nyble.topics.consumerAttributes.ConsumerAttributesKey;
 import com.nyble.topics.consumerAttributes.ConsumerAttributesValue;
+import com.nyble.types.ConsumerActionDescriptor;
 import com.nyble.types.ConsumerActionType;
 import com.nyble.util.DBUtil;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -105,7 +106,7 @@ public class App {
             KafkaConsumer<String, String> kConsumer = new KafkaConsumer<>(consumerProps);
             kConsumer.subscribe(Arrays.asList(Names.CONSUMER_ACTIONS_RMC_TOPIC, Names.CONSUMER_ACTIONS_RRP_TOPIC));
             while(true){
-                ConsumerRecords<String, String> records = kConsumer.poll(1000*10);
+                ConsumerRecords<String, String> records = kConsumer.poll(Duration.ofSeconds(10));
                 records.forEach(record->{
                     String provenienceTopic = record.topic();
                     int lastAction;
@@ -120,9 +121,7 @@ public class App {
                     //filter actions
                     ConsumerActionsValue cav = (ConsumerActionsValue) TopicObjectsFactory
                             .fromJson(record.value(), ConsumerActionsValue.class);
-                    if(Integer.parseInt(cav.getId()) > lastAction && ActionsDict.filter(cav) &&
-                            new Date(Long.parseLong(cav.getExternalSystemDate())).after(new Date(System.currentTimeMillis() -
-                                    365L*24*60*60*1000))){
+                    if(Integer.parseInt(cav.getId()) > lastAction && ActionsDict.filter(cav)){
                         ConsumerActionDescriptor cad = ActionsDict.get(cav.getSystemId(), cav.getActionId());
                         ConsumerActionType cat = new ConsumerActionType(Integer.parseInt(cav.getConsumerId()),
                                 Integer.parseInt(cav.getSystemId()), cad.getType());

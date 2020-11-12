@@ -19,11 +19,6 @@ changeLog: PUT /logger `{"logName": "com.nyble", "logLevel": "warn"}`
 
 #### check that stream app O2OPotentialsStreamApp.jar is not running
 
-#### check that kafka connector jdbc_source_o2o_potentials_start does not exist OR pause and delete it
-#### reset kafka connector jdbc_source_o2o_potentials_start offset
-`./bin/kafka-console-producer --bootstrap-server 10.100.1.17:9093 --topic connect-consumer-action-offsets --property "parse.key=true" --property "key.separator=;"`  
-`["jdbc_source_o2o_potentials_start",{"query":"query"}];{"incrementing":0}`
-
 #### empty o2o-potentials-counts (source topic) :
 `bin/kafka-configs --bootstrap-server 10.100.1.17:9093 --alter --entity-type topics --entity-name o2o-potentials-counts --add-config retention.ms=10`  
 --wait  
@@ -35,11 +30,5 @@ changeLog: PUT /logger `{"logName": "com.nyble", "logLevel": "warn"}`
 #### delete internal stream app topics
 `./bin/kafka-topics --bootstrap-server 10.100.1.17:9093  --delete --topic <everything starting with potentials-stream-...>`
 
-#### update consumers table and set all web and o2o in/out counts to 0
-`update consumers set payload = payload-'webInCnt'-'o2oInCnt'-'o2oOutCnt';`
-
 #### start streams app
-
---create kafka connector jdbc_source_o2o_potentials_start and wait until full table is loaded  
---pause and delete kafka connector jdbc_source_o2o_potentials_start  
 

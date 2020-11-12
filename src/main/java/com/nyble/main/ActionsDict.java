@@ -2,6 +2,7 @@ package com.nyble.main;
 
 import com.nyble.topics.Names;
 import com.nyble.topics.consumerActions.ConsumerActionsValue;
+import com.nyble.types.ConsumerActionDescriptor;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,7 +53,12 @@ public class ActionsDict {
     public static boolean filter(ConsumerActionsValue cav){
         String systemId = cav.getSystemId()+"";
         String actionId = cav.getActionId()+"";
-        return contains(systemId, actionId);
+        final long twoYearsDurationMillis = 365L*24*60*60*1000;
+        Date actionDate = new Date(Long.parseLong(cav.getExternalSystemDate()));
+        Date now = new Date();
+        boolean allowedActionDate = actionDate.after(new Date(System.currentTimeMillis() - twoYearsDurationMillis)) &&
+                (actionDate.before(now) || actionDate.equals(now));
+        return contains(systemId, actionId) && allowedActionDate;
     }
 
     public static String getActionsList(int actionType, int systemId) {

@@ -25,6 +25,26 @@ select * from (
 ) foo
 where action_type > 0;
 
-alter table o2o_potentials_start add column id serial;
+update consumers set payload = payload-'webInCnt'-'o2oInCnt'-'o2oOutCnt';
+
+insert into consumers (system_id, consumer_id, payload, updated_at)
+select system_id, consumer_id,
+case when action_type = 3 then
+        json_build_object('o2oOutCnt',
+        	json_build_object('lut', round(extract(epoch from now()) * 1000)::text, 'value', total::text)
+        )
+     when action_type = 2 then
+        json_build_object('o2oInCnt',
+        	json_build_object('lut', round(extract(epoch from now()) * 1000)::text, 'value', total::text)
+        )
+     when action_type = 1 then
+        json_build_object('webInCnt',
+        	json_build_object('lut', round(extract(epoch from now()) * 1000)::text, 'value', total::text)
+        )
+     else null
+end , now()
+from o2o_potentials_start
+on conflict on constraint consumers_pk do update
+set payload = consumers.payload || excluded.payload, updated_at = now();
 
 commit;
