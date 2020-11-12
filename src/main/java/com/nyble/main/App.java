@@ -75,8 +75,8 @@ public class App {
 
     public static void initSourceTopic(List<String> topics) throws ExecutionException, InterruptedException {
         //this values should be updated on redeployment, if actions are reloaded
-        final int lastRmcActionId = 662871381;
-        final int lastRrpActionId = 2281565;
+        final int lastRmcActionId = 670349815;
+        final int lastRrpActionId = 2309077;
         //
         final String consumerGroupId = "o2o-potentials-source-creator";
         final Gson gson = new Gson();
@@ -87,6 +87,7 @@ public class App {
         consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         consumerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        consumerProps.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 1000*60);
 
         Properties adminProps = new Properties();
         adminProps.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, KAFKA_CLUSTER_BOOTSTRAP_SERVERS);
