@@ -79,7 +79,7 @@ public class App {
         int lastRmcActionId;
         int lastRrpActionId;
         final String configName = "O2O_POTENTIALS_LAST_ACTION_ID_%";
-        final String lastActIdsQ = String.format("select vals[1] as rmc, vals[2] as rrp from\n" +
+        final String lastActIdsQ = String.format("select vals[1]::int as rmc, vals[2]::int as rrp from\n" +
                 "(\tselect array_agg(value order by key) as vals \n" +
                 "\tfrom config_parameters cp \n" +
                 "\twhere key like '%s'\n" +
