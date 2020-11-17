@@ -87,8 +87,13 @@ public class App {
         try(Connection conn = DBUtil.getInstance().getConnection("datawarehouse");
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(lastActIdsQ)){
-            lastRmcActionId = rs.getInt("rmc");
-            lastRrpActionId = rs.getInt("rrp");
+            if(rs.next()){
+                lastRmcActionId = rs.getInt("rmc");
+                lastRrpActionId = rs.getInt("rrp");
+            }else{
+                throw new RuntimeException("Last action ids not set");
+            }
+
         } catch (SQLException e) {
             throw new RuntimeSqlException(e.getMessage(), e);
         }
