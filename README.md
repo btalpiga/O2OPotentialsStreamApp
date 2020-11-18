@@ -39,8 +39,7 @@ changeLog: PUT /logger `{"logName": "com.nyble", "logLevel": "warn"}`
 #### load initial state
 `PGPASSWORD=postgres10@ nohup psql -U postgres -h localhost -d datawarehouse -f "/home/crmsudo/jobs/kafkaClients/scripts/initial-o2o-potentials-calc.sql"&`
 `PGPASSWORD=postgres10@ nohup psql -U postgres -h localhost -d datawarehouse -c "\copy (\
-select replace(json_build_object('systemId', system_id, 'consumerId', consumer_id, 'actionType',\
-case when action_type = 1 then 'webInCnt' when action_type = 2 then 'o2oInCnt' when action_type = 3 then 'o2oOutCnt' else 'unknown' end)::text,' :',':'),\
+select replace(json_build_object('systemId', system_id, 'consumerId', consumer_id, 'actionType', action_type)::text,' :',':'),\
 total from o2o_potentials_start\
 ) to '/tmp/o2o-potentials-source.csv' delimiter ';'" &`  
 `cd /home/crmsudo/jobs/kafkaClients/scripts/kafkaToolsJava`

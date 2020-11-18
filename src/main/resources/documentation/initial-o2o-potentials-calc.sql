@@ -13,14 +13,17 @@ select * from (
          else 0 end as action_type,
     count(*) as total
     from consumer_actions
-    where external_system_date >= now()-'2 year'::interval and action_id in (1828,1728,1814,1898,1858,1776,1866,3069,3064,1898,1775,1729,1740,1951,1964,1922) and
-        ( (id <=:lastRmcActionId and system_id = 1) or (id <=:lastRrpActionId and system_id = 2))
+    where external_system_date >= now()-'2 year'::interval and external_system_date <= now()
+        and ((action_id in (1828,1728,1814,1898,1858,1776,1866) and system_id = 1 and id <=:lastRmcActionId)
+            or (action_id in (3069,3064,1898,1775) and system_id = 2 and id <=:lastRrpActionId)
+            or (action_id in (1729,1740,1951,1964,1922) and system_id = 1 and id <=:lastRmcActionId)
+        )
     group by system_id, consumer_id, action_type
     union
     select system_id, consumer_id, 3 as action_type, count(*) as total
     from consumer_actions
-    where external_system_date >= now()-'1 year'::interval and action_id in (1791,1920) and
-        ( (id <=:lastRmcActionId and system_id = 1) )
+    where external_system_date >= now()-'1 year'::interval and external_system_date <= now()
+        and action_id in (1791,1920) and system_id = 1 and id <=:lastRmcActionId
     group by system_id, consumer_id
 ) foo
 where action_type > 0;
