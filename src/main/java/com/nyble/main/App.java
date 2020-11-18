@@ -174,44 +174,51 @@ public class App {
         Runtime.getRuntime().addShutdownHook(new Thread(scheduler::shutdown));
     }
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        SpringApplication.run(App.class,args);
+    public static void main(String[] args)  {
 
-        final String sourceTopic = "o2o-potentials-counts";
+        try{
+            SpringApplication.run(App.class,args);
 
-        initSourceTopic(Collections.singletonList(sourceTopic));
-        scheduleBatchUpdate(sourceTopic);
+            final String sourceTopic = "o2o-potentials-counts";
 
-        final Gson gson = new Gson();
-        final StreamsBuilder builder = new StreamsBuilder();
+            initSourceTopic(Collections.singletonList(sourceTopic));
+            scheduleBatchUpdate(sourceTopic);
 
-        builder.stream(sourceTopic,Consumed.with(Serdes.String(), Serdes.Integer()))
-                .groupBy((catStr, cnt)->catStr, Grouped.with(Serdes.String(), Serdes.Integer()))
-                .reduce(Integer::sum)
-                .toStream()
-                .map( (catStr, actionCounts) -> {
-                    ConsumerActionType cat = gson.fromJson(catStr, ConsumerActionType.class);
-                    String key;
-                    if(cat.getActionType() == ConsumerActionDescriptor.WEB_IN){
-                        key = "webInCnt";
-                    }else if(cat.getActionType() == ConsumerActionDescriptor.O2O_IN){
-                        key = "o2oInCnt";
-                    }else{
-                        key = "o2oOutCnt";
-                    }
-                    ConsumerAttributesKey cak = new ConsumerAttributesKey(cat.getSystemId(), cat.getConsumerId());
-                    ConsumerAttributesValue cav = new ConsumerAttributesValue(cat.getSystemId()+"", cat.getConsumerId()+"",
-                            key, actionCounts+"", new Date().getTime()+"", new Date().getTime()+"");
-                    return KeyValue.pair(cak.toJson(), cav.toJson());
-                })
-                .to(Names.CONSUMER_ATTRIBUTES_TOPIC, Produced.with(Serdes.String(), Serdes.String()));
+            final Gson gson = new Gson();
+            final StreamsBuilder builder = new StreamsBuilder();
 
-        Topology topology = builder.build();
-        logger.debug(topology.describe().toString());
-        KafkaStreams streams = new KafkaStreams(topology, streamsConfig);
-        streams.cleanUp();
-        streams.start();
-        Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
+            builder.stream(sourceTopic,Consumed.with(Serdes.String(), Serdes.Integer()))
+                    .groupBy((catStr, cnt)->catStr, Grouped.with(Serdes.String(), Serdes.Integer()))
+                    .reduce(Integer::sum)
+                    .toStream()
+                    .map( (catStr, actionCounts) -> {
+                        ConsumerActionType cat = gson.fromJson(catStr, ConsumerActionType.class);
+                        String key;
+                        if(cat.getActionType() == ConsumerActionDescriptor.WEB_IN){
+                            key = "webInCnt";
+                        }else if(cat.getActionType() == ConsumerActionDescriptor.O2O_IN){
+                            key = "o2oInCnt";
+                        }else{
+                            key = "o2oOutCnt";
+                        }
+                        ConsumerAttributesKey cak = new ConsumerAttributesKey(cat.getSystemId(), cat.getConsumerId());
+                        ConsumerAttributesValue cav = new ConsumerAttributesValue(cat.getSystemId()+"", cat.getConsumerId()+"",
+                                key, actionCounts+"", new Date().getTime()+"", new Date().getTime()+"");
+                        return KeyValue.pair(cak.toJson(), cav.toJson());
+                    })
+                    .to(Names.CONSUMER_ATTRIBUTES_TOPIC, Produced.with(Serdes.String(), Serdes.String()));
+
+            Topology topology = builder.build();
+            logger.debug(topology.describe().toString());
+            KafkaStreams streams = new KafkaStreams(topology, streamsConfig);
+            streams.cleanUp();
+            streams.start();
+            Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            logger.error("EXITING");
+            System.exit(1);
+        }
 
     }
 
