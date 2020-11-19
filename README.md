@@ -59,7 +59,7 @@ PGPASSWORD=postgres10@ nohup psql -U postgres -h localhost -d datawarehouse \
 ```shell script
 PGPASSWORD=postgres10@ nohup psql -U postgres -h localhost -d datawarehouse -c "\copy (
 select 
-replace(replace(json_build_object('systemId', system_id, 'consumerId', consumer_id, 'actionType', action_type)::text,' : ',':'), ', ', ','),
+replace(replace(json_build_object('consumerId', consumer_id, 'systemId', system_id, 'actionType', action_type)::text,' : ',':'), ', ', ','),
 total from o2o_potentials_start
 ) to '/tmp/o2o-potentials-source.csv' delimiter ';'" &
 ```  
