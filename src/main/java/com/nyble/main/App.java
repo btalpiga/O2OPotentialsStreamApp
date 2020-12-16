@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -38,10 +39,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @SpringBootApplication(scanBasePackages = {"com.nyble.rest"})
 public class App {
@@ -125,38 +123,50 @@ public class App {
 
         String sourceTopic = topics.get(0);
         Thread poolActionsThread = new Thread(()->{
-            KafkaConsumer<String, String> kConsumer = new KafkaConsumer<>(consumerProps);
-            kConsumer.subscribe(Arrays.asList(Names.CONSUMER_ACTIONS_RMC_TOPIC, Names.CONSUMER_ACTIONS_RRP_TOPIC));
-            while(true){
-                ConsumerRecords<String, String> records = kConsumer.poll(Duration.ofSeconds(10));
-                records.forEach(record->{
-                    String provenienceTopic = record.topic();
-                    int lastAction;
-                    if(provenienceTopic.endsWith("rmc")){
-                        lastAction = lastRmcActionId;
-                    } else if(provenienceTopic.endsWith("rrp")){
-                        lastAction = lastRrpActionId;
-                    } else {
-                        return;
-                    }
+            try{
+                KafkaConsumer<String, String> kConsumer = new KafkaConsumer<>(consumerProps);
+                kConsumer.subscribe(Arrays.asList(Names.CONSUMER_ACTIONS_RMC_TOPIC, Names.CONSUMER_ACTIONS_RRP_TOPIC));
+                while(true){
+                    ConsumerRecords<String, String> records = kConsumer.poll(Duration.ofSeconds(10));
+                    records.forEach(record->{
+                        String provenienceTopic = record.topic();
+                        int lastAction;
+                        if(provenienceTopic.endsWith("rmc")){
+                            lastAction = lastRmcActionId;
+                        } else if(provenienceTopic.endsWith("rrp")){
+                            lastAction = lastRrpActionId;
+                        } else {
+                            return;
+                        }
 
-                    //filter actions
-                    ConsumerActionsValue cav = (ConsumerActionsValue) TopicObjectsFactory
-                            .fromJson(record.value(), ConsumerActionsValue.class);
-                    if(Integer.parseInt(cav.getId()) > lastAction && ActionsDict.filter(cav)){
-                        ConsumerActionDescriptor cad = ActionsDict.get(cav.getSystemId(), cav.getActionId());
-                        ConsumerActionType cat = new ConsumerActionType(Integer.parseInt(cav.getConsumerId()),
-                                Integer.parseInt(cav.getSystemId()), cad.getType());
-                        producer.send(new ProducerRecord<>(sourceTopic, gson.toJson(cat), 1));
-                        logger.debug("Create {} topic input",sourceTopic);
-                    }
-                });
+                        //filter actions
+                        ConsumerActionsValue cav;
+                        try{
+                            cav = (ConsumerActionsValue) TopicObjectsFactory
+                                    .fromJson(record.value(), ConsumerActionsValue.class);
+                        }catch (Exception exp){
+                            logger.error("Last corrupt record key={}, value={}",record.key(), record.value());
+                            throw exp;
+                        }
+                        if(Integer.parseInt(cav.getId()) > lastAction && ActionsDict.filter(cav)){
+                            ConsumerActionDescriptor cad = ActionsDict.get(cav.getSystemId(), cav.getActionId());
+                            ConsumerActionType cat = new ConsumerActionType(Integer.parseInt(cav.getConsumerId()),
+                                    Integer.parseInt(cav.getSystemId()), cad.getType());
+                            producer.send(new ProducerRecord<>(sourceTopic, gson.toJson(cat), 1));
+                            logger.debug("Create {} topic input",sourceTopic);
+                        }
+                    });
+                }
+            }catch (Exception e){
+                logger.error(e.getMessage(), e);
+                logger.error("Stopping source thread creator O2OPotentials...");
             }
         });
+        poolActionsThread.setDaemon(true);
         poolActionsThread.start();
     }
 
-    public static void scheduleBatchUpdate(String intermediateTopic){
+    public static ScheduledExecutorService scheduleBatchUpdate(String intermediateTopic){
         final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         final Runnable task = ()->{
             try {
@@ -172,17 +182,17 @@ public class App {
         logger.info("Task will start in: "+delay.toMillis()+" millis");
 
         Runtime.getRuntime().addShutdownHook(new Thread(scheduler::shutdown));
+        return scheduler;
     }
 
     public static void main(String[] args)  {
-
+        ConfigurableApplicationContext restApp = null;
+        ExecutorService scheduler = null;
+        final String sourceTopic = "o2o-potentials-counts";
         try{
-            SpringApplication.run(App.class,args);
-
-            final String sourceTopic = "o2o-potentials-counts";
-
+            restApp = SpringApplication.run(App.class,args);
             initSourceTopic(Collections.singletonList(sourceTopic));
-            scheduleBatchUpdate(sourceTopic);
+            scheduler = scheduleBatchUpdate(sourceTopic);
 
             final Gson gson = new Gson();
             final StreamsBuilder builder = new StreamsBuilder();
@@ -215,6 +225,8 @@ public class App {
             streams.start();
             Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
         }catch(Exception e){
+            if(restApp != null){restApp.close();}
+            if(scheduler != null){scheduler.shutdown();}
             logger.error(e.getMessage(), e);
             logger.error("EXITING");
             System.exit(1);
