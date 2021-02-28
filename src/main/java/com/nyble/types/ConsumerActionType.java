@@ -1,5 +1,7 @@
 package com.nyble.types;
 
+import java.util.Objects;
+
 public class ConsumerActionType {
     private int consumerId;
     private int systemId;
@@ -33,5 +35,20 @@ public class ConsumerActionType {
 
     public void setActionType(int actionType) {
         this.actionType = actionType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ConsumerActionType)) return false;
+        ConsumerActionType that = (ConsumerActionType) o;
+        return consumerId == that.consumerId &&
+                systemId == that.systemId &&
+                actionType == that.actionType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(consumerId, systemId, actionType);
     }
 }
